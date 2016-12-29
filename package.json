@@ -1,0 +1,22 @@
+{
+  "name": "todo-elm-fable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "fable",
+    "watch": "fable -w --target watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fable-compiler": "^0.7.22",
+    "source-map-loader": "^0.1.5",
+    "webpack": "^1.14.0"
+  },
+  "dependencies": {
+    "core-js": "^2.4.1",
+    "fable-core": "^0.7.15",
+    "virtual-dom": "^2.1.1"
+  }
+}

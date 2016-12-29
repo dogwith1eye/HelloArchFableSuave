@@ -1,0 +1,17 @@
+{
+    "module": "commonjs",
+    "sourceMaps": true,
+    "projFile": "./src/client/client.fsproj",
+    "outDir": "temp",
+    "scripts": {
+        "prebuild": "npm install",
+        "postbuild": "webpack"
+    },
+    "targets": {
+        "watch": {
+            "scripts": {
+                "postbuild": "webpack --watch"
+            }
+        }
+    }
+}
