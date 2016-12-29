@@ -26,11 +26,6 @@ Target "Build" (fun _ ->
     // compile all projects below src/server/
     MSBuildDebug buildDir "Build" appReferences
     |> Log "AppBuild-Output: "
-    Npm (fun p ->
-              { p with
-                  Command = Install Standard
-                  WorkingDirectory = "."
-              })
     // build the client
     Npm (fun p -> 
               { p with
