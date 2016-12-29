@@ -70,9 +70,9 @@
 	
 	var _String = __webpack_require__(10);
 	
-	var _FableArch2 = __webpack_require__(14);
+	var _FableArch2 = __webpack_require__(15);
 	
-	var _FableArch3 = __webpack_require__(15);
+	var _FableArch3 = __webpack_require__(16);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -177,9 +177,7 @@
 	})(this, function (exports) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.setType = setType;
 	    exports.getType = getType;
 	    var fableGlobal = function () {
@@ -224,9 +222,7 @@
 	})(this, function (exports, _Symbol) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.Array = exports.Unit = exports.Any = exports.NonDeclaredType = undefined;
 	    exports.Option = Option;
 	    exports.Tuple = Tuple;
@@ -258,21 +254,6 @@
 	        return obj && obj.__esModule ? obj : {
 	            default: obj
 	        };
-	    }
-	
-	    function _defineProperty(obj, key, value) {
-	        if (key in obj) {
-	            Object.defineProperty(obj, key, {
-	                value: value,
-	                enumerable: true,
-	                configurable: true,
-	                writable: true
-	            });
-	        } else {
-	            obj[key] = value;
-	        }
-	
-	        return obj;
 	    }
 	
 	    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -311,24 +292,6 @@
 	        }
 	    }
 	
-	    var _createClass = function () {
-	        function defineProperties(target, props) {
-	            for (var i = 0; i < props.length; i++) {
-	                var descriptor = props[i];
-	                descriptor.enumerable = descriptor.enumerable || false;
-	                descriptor.configurable = true;
-	                if ("value" in descriptor) descriptor.writable = true;
-	                Object.defineProperty(target, descriptor.key, descriptor);
-	            }
-	        }
-	
-	        return function (Constructor, protoProps, staticProps) {
-	            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	            if (staticProps) defineProperties(Constructor, staticProps);
-	            return Constructor;
-	        };
-	    }();
-	
 	    var NonDeclaredType = exports.NonDeclaredType = function () {
 	        function NonDeclaredType(kind, name, generics) {
 	            _classCallCheck(this, NonDeclaredType);
@@ -338,12 +301,9 @@
 	            this.generics = generics || [];
 	        }
 	
-	        _createClass(NonDeclaredType, [{
-	            key: "Equals",
-	            value: function Equals(other) {
-	                return this.kind === other.kind && this.name === other.name && equals(this.generics, other.generics);
-	            }
-	        }]);
+	        NonDeclaredType.prototype.Equals = function Equals(other) {
+	            return this.kind === other.kind && this.name === other.name && equals(this.generics, other.generics);
+	        };
 	
 	        return NonDeclaredType;
 	    }();
@@ -354,15 +314,12 @@
 	        function GenericNonDeclaredType(kind, generics) {
 	            _classCallCheck(this, GenericNonDeclaredType);
 	
-	            return _possibleConstructorReturn(this, (GenericNonDeclaredType.__proto__ || Object.getPrototypeOf(GenericNonDeclaredType)).call(this, kind, null, generics));
+	            return _possibleConstructorReturn(this, _NonDeclaredType.call(this, kind, null, generics));
 	        }
 	
-	        _createClass(GenericNonDeclaredType, [{
-	            key: _Symbol2.default.generics,
-	            value: function value() {
-	                return this.generics;
-	            }
-	        }]);
+	        GenericNonDeclaredType.prototype[_Symbol2.default.generics] = function () {
+	            return this.generics;
+	        };
 	
 	        return GenericNonDeclaredType;
 	    }(NonDeclaredType);
@@ -392,15 +349,12 @@
 	            function _class() {
 	                _classCallCheck(this, _class);
 	
-	                return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+	                return _possibleConstructorReturn(this, _typeDef.apply(this, arguments));
 	            }
 	
-	            _createClass(_class, [{
-	                key: _Symbol2.default.generics,
-	                value: function value() {
-	                    return genArgs;
-	                }
-	            }]);
+	            _class.prototype[_Symbol2.default.generics] = function () {
+	                return genArgs;
+	            };
 	
 	            return _class;
 	        }(typeDef);
@@ -471,7 +425,7 @@
 	    }
 	    function equals(x, y) {
 	        // Optimization if they are referencially equal
-	        if (x === y) return true;else if (x == null) return y == null;else if (y == null) return false;else if (isGeneric(x) && isGeneric(y)) return getDefinition(x) === getDefinition(y) && equalsRecords(x.prototype[_Symbol2.default.generics](), y.prototype[_Symbol2.default.generics]());else if (Object.getPrototypeOf(x) !== Object.getPrototypeOf(y)) return false;else if (typeof x.Equals === "function") return x.Equals(y);else if (Array.isArray(x)) {
+	        if (x === y) return true;else if (x == null) return y == null;else if (y == null) return false;else if (isGeneric(x) && isGeneric(y)) return getDefinition(x) === getDefinition(y) && equalsRecords(x.prototype[_Symbol2.default.generics](), y.prototype[_Symbol2.default.generics]());else if (Object.getPrototypeOf(x) !== Object.getPrototypeOf(y)) return false;else if (typeof x.Equals === "function") return x.Equals(y);else if (typeof x.equals === "function") return x.equals(y);else if (Array.isArray(x)) {
 	            if (x.length != y.length) return false;
 	            for (var i = 0; i < x.length; i++) {
 	                if (!equals(x[i], y[i])) return false;
@@ -488,7 +442,7 @@
 	    function compare(x, y) {
 	        // Optimization if they are referencially equal
 	        if (x === y) return 0;
-	        if (x == null) return y == null ? 0 : -1;else if (y == null) return -1;else if (Object.getPrototypeOf(x) !== Object.getPrototypeOf(y)) return -1;else if (hasInterface(x, "System.IComparable")) return x.CompareTo(y);else if (Array.isArray(x)) {
+	        if (x == null) return y == null ? 0 : -1;else if (y == null) return -1;else if (Object.getPrototypeOf(x) !== Object.getPrototypeOf(y)) return -1;else if (hasInterface(x, "System.IComparable")) return x.CompareTo(y);else if (typeof x.compare === "function") return x.compare(y);else if (Array.isArray(x)) {
 	            if (x.length != y.length) return x.length < y.length ? -1 : 1;
 	            for (var i = 0, j = 0; i < x.length; i++) {
 	                if ((j = compare(x[i], y[i])) !== 0) return j;
@@ -558,39 +512,22 @@
 	        }
 	    }
 	    function createDisposable(f) {
-	        return _defineProperty({
+	        var _ref;
+	
+	        return _ref = {
 	            Dispose: f
-	        }, _Symbol2.default.reflection, function () {
+	        }, _ref[_Symbol2.default.reflection] = function () {
 	            return { interfaces: ["System.IDisposable"] };
-	        });
+	        }, _ref;
 	    }
 	    function createObj(fields) {
-	        var o = {};
-	        var _iteratorNormalCompletion = true;
-	        var _didIteratorError = false;
-	        var _iteratorError = undefined;
-	
-	        try {
-	            for (var _iterator = fields[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                var kv = _step.value;
-	
-	                o[kv[0]] = kv[1];
-	            }
-	        } catch (err) {
-	            _didIteratorError = true;
-	            _iteratorError = err;
-	        } finally {
-	            try {
-	                if (!_iteratorNormalCompletion && _iterator.return) {
-	                    _iterator.return();
-	                }
-	            } finally {
-	                if (_didIteratorError) {
-	                    throw _iteratorError;
-	                }
-	            }
+	        var iter = fields[Symbol.iterator]();
+	        var cur = iter.next(),
+	            o = {};
+	        while (!cur.done) {
+	            o[cur.value[0]] = cur.value[1];
+	            cur = iter.next();
 	        }
-	
 	        return o;
 	    }
 	    function toPlainJsObj(source) {
@@ -799,10 +736,7 @@
 	}({});
 	
 	var Svg = exports.Svg = function (__exports) {
-	    var svgNS = __exports.svgNS = function () {
-	        return new Types.Attribute("Property", [["namespace", "http://www.w3.org/2000/svg"]]);
-	    };
-	
+	    var svgNS = __exports.svgNS = new Types.Attribute("Property", [["namespace", "http://www.w3.org/2000/svg"]]);
 	    return __exports;
 	}({});
 
@@ -826,9 +760,7 @@
 	})(this, function (exports, _ListClass, _Seq, _Map) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.ofArray = undefined;
 	    Object.defineProperty(exports, "ofArray", {
 	        enumerable: true,
@@ -979,9 +911,7 @@
 	})(this, function (exports, _Symbol, _Util) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.ofArray = ofArray;
 	
 	    var _Symbol2 = _interopRequireDefault(_Symbol);
@@ -1033,68 +963,63 @@
 	            this.tail = tail;
 	        }
 	
+	        List.prototype.ToString = function ToString() {
+	            return "[" + Array.from(this).map(_Util.toString).join("; ") + "]";
+	        };
+	
+	        List.prototype.Equals = function Equals(x) {
+	            // Optimization if they are referencially equal
+	            if (this === x) {
+	                return true;
+	            } else {
+	                var iter1 = this[Symbol.iterator](),
+	                    iter2 = x[Symbol.iterator]();
+	                for (;;) {
+	                    var cur1 = iter1.next(),
+	                        cur2 = iter2.next();
+	                    if (cur1.done) return cur2.done ? true : false;else if (cur2.done) return false;else if (!(0, _Util.equals)(cur1.value, cur2.value)) return false;
+	                }
+	            }
+	        };
+	
+	        List.prototype.CompareTo = function CompareTo(x) {
+	            // Optimization if they are referencially equal
+	            if (this === x) {
+	                return 0;
+	            } else {
+	                var acc = 0;
+	                var iter1 = this[Symbol.iterator](),
+	                    iter2 = x[Symbol.iterator]();
+	                for (;;) {
+	                    var cur1 = iter1.next(),
+	                        cur2 = iter2.next();
+	                    if (cur1.done) return cur2.done ? acc : -1;else if (cur2.done) return 1;else {
+	                        acc = (0, _Util.compare)(cur1.value, cur2.value);
+	                        if (acc != 0) return acc;
+	                    }
+	                }
+	            }
+	        };
+	
+	        List.prototype[Symbol.iterator] = function () {
+	            var cur = this;
+	            return {
+	                next: function next() {
+	                    var tmp = cur;
+	                    cur = cur.tail;
+	                    return { done: tmp.tail == null, value: tmp.head };
+	                }
+	            };
+	        };
+	
+	        List.prototype[_Symbol2.default.reflection] = function () {
+	            return {
+	                type: "Microsoft.FSharp.Collections.FSharpList",
+	                interfaces: ["System.IEquatable", "System.IComparable"]
+	            };
+	        };
+	
 	        _createClass(List, [{
-	            key: "ToString",
-	            value: function ToString() {
-	                return "[" + Array.from(this).map(_Util.toString).join("; ") + "]";
-	            }
-	        }, {
-	            key: "Equals",
-	            value: function Equals(x) {
-	                // Optimization if they are referencially equal
-	                if (this === x) {
-	                    return true;
-	                } else {
-	                    var iter1 = this[Symbol.iterator](),
-	                        iter2 = x[Symbol.iterator]();
-	                    for (;;) {
-	                        var cur1 = iter1.next(),
-	                            cur2 = iter2.next();
-	                        if (cur1.done) return cur2.done ? true : false;else if (cur2.done) return false;else if (!(0, _Util.equals)(cur1.value, cur2.value)) return false;
-	                    }
-	                }
-	            }
-	        }, {
-	            key: "CompareTo",
-	            value: function CompareTo(x) {
-	                // Optimization if they are referencially equal
-	                if (this === x) {
-	                    return 0;
-	                } else {
-	                    var acc = 0;
-	                    var iter1 = this[Symbol.iterator](),
-	                        iter2 = x[Symbol.iterator]();
-	                    for (;;) {
-	                        var cur1 = iter1.next(),
-	                            cur2 = iter2.next();
-	                        if (cur1.done) return cur2.done ? acc : -1;else if (cur2.done) return 1;else {
-	                            acc = (0, _Util.compare)(cur1.value, cur2.value);
-	                            if (acc != 0) return acc;
-	                        }
-	                    }
-	                }
-	            }
-	        }, {
-	            key: Symbol.iterator,
-	            value: function value() {
-	                var cur = this;
-	                return {
-	                    next: function next() {
-	                        var tmp = cur;
-	                        cur = cur.tail;
-	                        return { done: tmp.tail == null, value: tmp.head };
-	                    }
-	                };
-	            }
-	        }, {
-	            key: _Symbol2.default.reflection,
-	            value: function value() {
-	                return {
-	                    type: "Microsoft.FSharp.Collections.FSharpList",
-	                    interfaces: ["System.IEquatable", "System.IComparable"]
-	                };
-	            }
-	        }, {
 	            key: "length",
 	            get: function get() {
 	                var cur = this,
@@ -1132,9 +1057,7 @@
 	})(this, function (exports, _Util, _Array, _ListClass) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.toList = toList;
 	    exports.ofList = ofList;
 	    exports.ofArray = ofArray;
@@ -1229,59 +1152,6 @@
 	        return obj && obj.__esModule ? obj : {
 	            default: obj
 	        };
-	    }
-	
-	    var _slicedToArray = function () {
-	        function sliceIterator(arr, i) {
-	            var _arr = [];
-	            var _n = true;
-	            var _d = false;
-	            var _e = undefined;
-	
-	            try {
-	                for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-	                    _arr.push(_s.value);
-	
-	                    if (i && _arr.length === i) break;
-	                }
-	            } catch (err) {
-	                _d = true;
-	                _e = err;
-	            } finally {
-	                try {
-	                    if (!_n && _i["return"]) _i["return"]();
-	                } finally {
-	                    if (_d) throw _e;
-	                }
-	            }
-	
-	            return _arr;
-	        }
-	
-	        return function (arr, i) {
-	            if (Array.isArray(arr)) {
-	                return arr;
-	            } else if (Symbol.iterator in Object(arr)) {
-	                return sliceIterator(arr, i);
-	            } else {
-	                throw new TypeError("Invalid attempt to destructure non-iterable instance");
-	            }
-	        };
-	    }();
-	
-	    function _defineProperty(obj, key, value) {
-	        if (key in obj) {
-	            Object.defineProperty(obj, key, {
-	                value: value,
-	                enumerable: true,
-	                configurable: true,
-	                writable: true
-	            });
-	        } else {
-	            obj[key] = value;
-	        }
-	
-	        return obj;
 	    }
 	
 	    function __failIfNone(res) {
@@ -1399,9 +1269,11 @@
 	        return nonZero != null ? nonZero : count(xs) - count(ys);
 	    }
 	    function delay(f) {
-	        return _defineProperty({}, Symbol.iterator, function () {
+	        var _ref;
+	
+	        return _ref = {}, _ref[Symbol.iterator] = function () {
 	            return f()[Symbol.iterator]();
-	        });
+	        }, _ref;
 	    }
 	    function empty() {
 	        return unfold(function () {
@@ -1693,10 +1565,8 @@
 	
 	            var _f = f(acc, cur.value);
 	
-	            var _f2 = _slicedToArray(_f, 2);
-	
-	            r = _f2[0];
-	            acc = _f2[1];
+	            r = _f[0];
+	            acc = _f[1];
 	
 	            result.push(r);
 	        }
@@ -1707,12 +1577,10 @@
 	        var result = [];
 	        var r = void 0;
 	        for (var i = arr.length - 1; i >= 0; i--) {
-	            var _f3 = f(arr[i], acc);
+	            var _f2 = f(arr[i], acc);
 	
-	            var _f4 = _slicedToArray(_f3, 2);
-	
-	            r = _f4[0];
-	            acc = _f4[1];
+	            r = _f2[0];
+	            acc = _f2[1];
 	
 	            result.push(r);
 	        }
@@ -1824,12 +1692,14 @@
 	        }, x);
 	    }
 	    function skip(n, xs) {
-	        return _defineProperty({}, Symbol.iterator, function () {
+	        var _ref2;
+	
+	        return _ref2 = {}, _ref2[Symbol.iterator] = function () {
 	            var iter = xs[Symbol.iterator]();
 	            for (var i = 1; i <= n; i++) {
 	                if (iter.next().done) throw new Error("Seq has not enough elements");
 	            }return iter;
-	        });
+	        }, _ref2;
 	    }
 	    function skipWhile(f, xs) {
 	        return delay(function () {
@@ -1854,12 +1724,14 @@
 	        }, 0, xs);
 	    }
 	    function tail(xs) {
+	        var _ref3;
+	
 	        var iter = xs[Symbol.iterator]();
 	        var cur = iter.next();
 	        if (cur.done) throw new Error("Seq was empty");
-	        return _defineProperty({}, Symbol.iterator, function () {
+	        return _ref3 = {}, _ref3[Symbol.iterator] = function () {
 	            return iter;
-	        });
+	        }, _ref3;
 	    }
 	    function take(n, xs) {
 	        var truncate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -1944,7 +1816,9 @@
 	        return __failIfNone(tryPick(f, xs));
 	    }
 	    function unfold(f, acc) {
-	        return _defineProperty({}, Symbol.iterator, function () {
+	        var _ref4;
+	
+	        return _ref4 = {}, _ref4[Symbol.iterator] = function () {
 	            return {
 	                next: function next() {
 	                    var res = f(acc);
@@ -1955,7 +1829,7 @@
 	                    return { done: true };
 	                }
 	            };
-	        });
+	        }, _ref4;
 	    }
 	    function zip(xs, ys) {
 	        return map2(function (x, y) {
@@ -1988,9 +1862,7 @@
 	})(this, function (exports) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.addRangeInPlace = addRangeInPlace;
 	    exports.copyTo = copyTo;
 	    exports.partition = partition;
@@ -2102,9 +1974,7 @@
 	})(this, function (exports, _ListClass, _Util, _GenericComparer, _Symbol, _Seq) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.MapTree = undefined;
 	    exports.groupBy = groupBy;
 	    exports.countBy = countBy;
@@ -2585,89 +2455,76 @@
 	            _classCallCheck(this, FMap);
 	        }
 	
-	        _createClass(FMap, [{
-	            key: "ToString",
-	            value: function ToString() {
-	                return "map [" + Array.from(this).map(_Util.toString).join("; ") + "]";
-	            }
-	        }, {
-	            key: "Equals",
-	            value: function Equals(m2) {
-	                return this.CompareTo(m2) === 0;
-	            }
-	        }, {
-	            key: "CompareTo",
-	            value: function CompareTo(m2) {
-	                var _this = this;
+	        FMap.prototype.ToString = function ToString() {
+	            return "map [" + Array.from(this).map(_Util.toString).join("; ") + "]";
+	        };
 	
-	                return this === m2 ? 0 : (0, _Seq.compareWith)(function (kvp1, kvp2) {
-	                    var c = _this.comparer.Compare(kvp1[0], kvp2[0]);
-	                    return c !== 0 ? c : (0, _Util.compare)(kvp1[1], kvp2[1]);
-	                }, this, m2);
-	            }
-	        }, {
-	            key: Symbol.iterator,
-	            value: function value() {
-	                var i = tree_mkIterator(this.tree);
-	                return {
-	                    next: function next() {
-	                        return tree_moveNext(i);
-	                    }
-	                };
-	            }
-	        }, {
-	            key: "entries",
-	            value: function entries() {
-	                return this[Symbol.iterator]();
-	            }
-	        }, {
-	            key: "keys",
-	            value: function keys() {
-	                return (0, _Seq.map)(function (kv) {
-	                    return kv[0];
-	                }, this);
-	            }
-	        }, {
-	            key: "values",
-	            value: function values() {
-	                return (0, _Seq.map)(function (kv) {
-	                    return kv[1];
-	                }, this);
-	            }
-	        }, {
-	            key: "get",
-	            value: function get(k) {
-	                return tree_find(this.comparer, k, this.tree);
-	            }
-	        }, {
-	            key: "has",
-	            value: function has(k) {
-	                return tree_mem(this.comparer, k, this.tree);
-	            }
-	        }, {
-	            key: "set",
-	            value: function set(k, v) {
-	                throw new Error("not supported");
-	            }
-	        }, {
-	            key: "delete",
-	            value: function _delete(k) {
-	                throw new Error("not supported");
-	            }
-	        }, {
-	            key: "clear",
-	            value: function clear() {
-	                throw new Error("not supported");
-	            }
-	        }, {
-	            key: _Symbol2.default.reflection,
-	            value: function value() {
-	                return {
-	                    type: "Microsoft.FSharp.Collections.FSharpMap",
-	                    interfaces: ["System.IEquatable", "System.IComparable"]
-	                };
-	            }
-	        }, {
+	        FMap.prototype.Equals = function Equals(m2) {
+	            return this.CompareTo(m2) === 0;
+	        };
+	
+	        FMap.prototype.CompareTo = function CompareTo(m2) {
+	            var _this = this;
+	
+	            return this === m2 ? 0 : (0, _Seq.compareWith)(function (kvp1, kvp2) {
+	                var c = _this.comparer.Compare(kvp1[0], kvp2[0]);
+	                return c !== 0 ? c : (0, _Util.compare)(kvp1[1], kvp2[1]);
+	            }, this, m2);
+	        };
+	
+	        FMap.prototype[Symbol.iterator] = function () {
+	            var i = tree_mkIterator(this.tree);
+	            return {
+	                next: function next() {
+	                    return tree_moveNext(i);
+	                }
+	            };
+	        };
+	
+	        FMap.prototype.entries = function entries() {
+	            return this[Symbol.iterator]();
+	        };
+	
+	        FMap.prototype.keys = function keys() {
+	            return (0, _Seq.map)(function (kv) {
+	                return kv[0];
+	            }, this);
+	        };
+	
+	        FMap.prototype.values = function values() {
+	            return (0, _Seq.map)(function (kv) {
+	                return kv[1];
+	            }, this);
+	        };
+	
+	        FMap.prototype.get = function get(k) {
+	            return tree_find(this.comparer, k, this.tree);
+	        };
+	
+	        FMap.prototype.has = function has(k) {
+	            return tree_mem(this.comparer, k, this.tree);
+	        };
+	
+	        FMap.prototype.set = function set(k, v) {
+	            throw new Error("not supported");
+	        };
+	
+	        FMap.prototype.delete = function _delete(k) {
+	            throw new Error("not supported");
+	        };
+	
+	        FMap.prototype.clear = function clear() {
+	            throw new Error("not supported");
+	        };
+	
+	        FMap.prototype[_Symbol2.default.reflection] = function () {
+	            return {
+	                type: "Microsoft.FSharp.Collections.FSharpMap",
+	                interfaces: ["System.IEquatable", "System.IComparable"]
+	            };
+	        };
+	
+	        _createClass(FMap, [{
 	            key: "size",
 	            get: function get() {
 	                return tree_size(this.tree);
@@ -2776,9 +2633,7 @@
 	})(this, function (exports, _Util, _Symbol) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	
 	    var _Symbol2 = _interopRequireDefault(_Symbol);
 	
@@ -2794,24 +2649,6 @@
 	        }
 	    }
 	
-	    var _createClass = function () {
-	        function defineProperties(target, props) {
-	            for (var i = 0; i < props.length; i++) {
-	                var descriptor = props[i];
-	                descriptor.enumerable = descriptor.enumerable || false;
-	                descriptor.configurable = true;
-	                if ("value" in descriptor) descriptor.writable = true;
-	                Object.defineProperty(target, descriptor.key, descriptor);
-	            }
-	        }
-	
-	        return function (Constructor, protoProps, staticProps) {
-	            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	            if (staticProps) defineProperties(Constructor, staticProps);
-	            return Constructor;
-	        };
-	    }();
-	
 	    var GenericComparer = function () {
 	        function GenericComparer(f) {
 	            _classCallCheck(this, GenericComparer);
@@ -2819,12 +2656,9 @@
 	            this.Compare = f || _Util.compare;
 	        }
 	
-	        _createClass(GenericComparer, [{
-	            key: _Symbol2.default.reflection,
-	            value: function value() {
-	                return { interfaces: ["System.IComparer"] };
-	            }
-	        }]);
+	        GenericComparer.prototype[_Symbol2.default.reflection] = function () {
+	            return { interfaces: ["System.IComparer"] };
+	        };
 	
 	        return GenericComparer;
 	    }();
@@ -2851,9 +2685,7 @@
 	})(this, function (exports, _Util, _RegExp, _Date) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.fsFormat = fsFormat;
 	    exports.format = format;
 	    exports.endsWith = endsWith;
@@ -2908,7 +2740,7 @@
 	                    case "A":
 	                        try {
 	                            rep = JSON.stringify(rep, function (k, v) {
-	                                return v && v[Symbol.iterator] && !Array.isArray(v) && isObject(v) ? Array.from(v) : v;
+	                                return v && v[Symbol.iterator] && !Array.isArray(v) && isObject(v) ? Array.from(v) : v && typeof v.ToString === "function" ? (0, _Util.toString)(v) : v;
 	                            });
 	                        } catch (err) {
 	                            // Fallback for objects with circular references
@@ -3187,9 +3019,7 @@
 	})(this, function (exports) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.create = create;
 	    exports.escape = escape;
 	    exports.unescape = unescape;
@@ -3299,22 +3129,20 @@
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(13), __webpack_require__(2)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(13), __webpack_require__(2), __webpack_require__(14)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== "undefined") {
-	        factory(exports, require("./TimeSpan"), require("./Util"));
+	        factory(exports, require("./TimeSpan"), require("./Util"), require("./Long"));
 	    } else {
 	        var mod = {
 	            exports: {}
 	        };
-	        factory(mod.exports, global.TimeSpan, global.Util);
+	        factory(mod.exports, global.TimeSpan, global.Util, global.Long);
 	        global.Date = mod.exports;
 	    }
-	})(this, function (exports, _TimeSpan, _Util) {
+	})(this, function (exports, _TimeSpan, _Util, _Long) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.minValue = minValue;
 	    exports.maxValue = maxValue;
 	    exports.parse = parse;
@@ -3359,6 +3187,25 @@
 	    exports.compareTo = compareTo;
 	    exports.op_Addition = op_Addition;
 	    exports.op_Subtraction = op_Subtraction;
+	
+	    var Long = _interopRequireWildcard(_Long);
+	
+	    function _interopRequireWildcard(obj) {
+	        if (obj && obj.__esModule) {
+	            return obj;
+	        } else {
+	            var newObj = {};
+	
+	            if (obj != null) {
+	                for (var key in obj) {
+	                    if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	                }
+	            }
+	
+	            newObj.default = obj;
+	            return newObj;
+	        }
+	    }
 	
 	    function __changeKind(d, kind) {
 	        var d2 = void 0;
@@ -3447,7 +3294,8 @@
 	        return __getValue(d, "FullYear");
 	    }
 	    function ticks(d) {
-	        return (d.getTime() + 6.2135604e+13 /* millisecondsJSOffset */) * 10000;
+	        return Long.fromNumber(d.getTime()).add(62135596800000) // UnixEpochMilliseconds
+	        .sub(d.kind == 2 /* Local */ ? d.getTimezoneOffset() * 60 * 1000 : 0).mul(10000);
 	    }
 	    function toBinary(d) {
 	        return ticks(d);
@@ -3481,8 +3329,8 @@
 	    function addMilliseconds(d, v) {
 	        return parse(d.getTime() + v, d.kind);
 	    }
-	    function addTicks(d, v) {
-	        return parse(d.getTime() + v / 10000, d.kind);
+	    function addTicks(d, t) {
+	        return parse(Long.fromNumber(d.getTime()).add(t.div(10000)).toNumber(), d.kind);
 	    }
 	    function addYears(d, v) {
 	        var newMonth = month(d);
@@ -3547,22 +3395,20 @@
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(2)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, __webpack_require__(2), __webpack_require__(14)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof exports !== "undefined") {
-	        factory(exports, require("./Util"));
+	        factory(exports, require("./Util"), require("./Long"));
 	    } else {
 	        var mod = {
 	            exports: {}
 	        };
-	        factory(mod.exports, global.Util);
+	        factory(mod.exports, global.Util, global.Long);
 	        global.TimeSpan = mod.exports;
 	    }
-	})(this, function (exports, _Util) {
+	})(this, function (exports, _Util, _Long) {
 	    "use strict";
 	
-	    Object.defineProperty(exports, "__esModule", {
-	        value: true
-	    });
+	    exports.__esModule = true;
 	    exports.create = create;
 	    exports.fromTicks = fromTicks;
 	    exports.fromDays = fromDays;
@@ -3585,6 +3431,26 @@
 	    exports.compare = compare;
 	    exports.compareTo = compareTo;
 	    exports.duration = duration;
+	
+	    var Long = _interopRequireWildcard(_Long);
+	
+	    function _interopRequireWildcard(obj) {
+	        if (obj && obj.__esModule) {
+	            return obj;
+	        } else {
+	            var newObj = {};
+	
+	            if (obj != null) {
+	                for (var key in obj) {
+	                    if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	                }
+	            }
+	
+	            newObj.default = obj;
+	            return newObj;
+	        }
+	    }
+	
 	    function create() {
 	        var d = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 	        var h = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -3608,7 +3474,7 @@
 	        return d * 86400000 + h * 3600000 + m * 60000 + s * 1000 + ms;
 	    }
 	    function fromTicks(ticks) {
-	        return ticks / 10000;
+	        return ticks.div(10000).toNumber();
 	    }
 	    function fromDays(d) {
 	        return create(d, 0, 0, 0);
@@ -3638,7 +3504,7 @@
 	        return Math.floor(ts % 1000);
 	    }
 	    function ticks(ts) {
-	        return ts * 10000;
+	        return Long.fromNumber(ts).mul(10000);
 	    }
 	    function totalDays(ts) {
 	        return ts / 86400000;
@@ -3674,6 +3540,917 @@
 
 /***/ },
 /* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports !== "undefined") {
+	        factory(exports);
+	    } else {
+	        var mod = {
+	            exports: {}
+	        };
+	        factory(mod.exports);
+	        global.Long = mod.exports;
+	    }
+	})(this, function (exports) {
+	    'use strict';
+	
+	    exports.__esModule = true;
+	    exports.isLong = isLong;
+	    exports.fromInt = fromInt;
+	    exports.fromNumber = fromNumber;
+	    exports.fromBits = fromBits;
+	    exports.fromString = fromString;
+	    exports.fromValue = fromValue;
+	
+	    function _classCallCheck(instance, Constructor) {
+	        if (!(instance instanceof Constructor)) {
+	            throw new TypeError("Cannot call a class as a function");
+	        }
+	    }
+	
+	    var Long = exports.Long = function () {
+	        /**
+	         * Constructs a 64 bit two's-complement integer, given its low and high 32 bit values as *signed* integers.
+	         *  See the from* functions below for more convenient ways of constructing Longs.
+	         * @param {number} low The low (signed) 32 bits of the long
+	         * @param {number} high The high (signed) 32 bits of the long
+	         * @param {boolean=} unsigned Whether unsigned or not, defaults to `false` for signed
+	         */
+	        function Long(low, high, unsigned) {
+	            _classCallCheck(this, Long);
+	
+	            /**
+	             * Tests if this Long's value equals the specified's. This is an alias of {@link Long#equals}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {boolean}
+	             */
+	            this.eq = this.equals;
+	            /**
+	             * Tests if this Long's value differs from the specified's. This is an alias of {@link Long#notEquals}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {boolean}
+	             */
+	            this.neq = this.notEquals;
+	            /**
+	             * Tests if this Long's value is less than the specified's. This is an alias of {@link Long#lessThan}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {boolean}
+	             */
+	            this.lt = this.lessThan;
+	            /**
+	             * Tests if this Long's value is less than or equal the specified's. This is an alias of {@link Long#lessThanOrEqual}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {boolean}
+	             */
+	            this.lte = this.lessThanOrEqual;
+	            /**
+	             * Tests if this Long's value is greater than the specified's. This is an alias of {@link Long#greaterThan}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {boolean}
+	             */
+	            this.gt = this.greaterThan;
+	            /**
+	             * Tests if this Long's value is greater than or equal the specified's. This is an alias of {@link Long#greaterThanOrEqual}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {boolean}
+	             */
+	            this.gte = this.greaterThanOrEqual;
+	            /**
+	             * Compares this Long's value with the specified's. This is an alias of {@link Long#compare}.
+	             * @param {!Long|number|string} other Other value
+	             * @returns {number} 0 if they are the same, 1 if the this is greater and -1
+	             *  if the given one is greater
+	             */
+	            this.comp = this.compare;
+	            /**
+	             * Negates this Long's value. This is an alias of {@link Long#negate}.
+	             * @returns {!Long} Negated Long
+	             */
+	            this.neg = this.negate;
+	            /**
+	             * Returns this Long's absolute value. This is an alias of {@link Long#absolute}.
+	             * @returns {!Long} Absolute Long
+	             */
+	            this.abs = this.absolute;
+	            /**
+	             * Returns the difference of this and the specified  This is an alias of {@link Long#subtract}.
+	             * @param {!Long|number|string} subtrahend Subtrahend
+	             * @returns {!Long} Difference
+	             */
+	            this.sub = this.subtract;
+	            /**
+	             * Returns the product of this and the specified  This is an alias of {@link Long#multiply}.
+	             * @param {!Long|number|string} multiplier Multiplier
+	             * @returns {!Long} Product
+	             */
+	            this.mul = this.multiply;
+	            /**
+	             * Returns this Long divided by the specified. This is an alias of {@link Long#divide}.
+	             * @param {!Long|number|string} divisor Divisor
+	             * @returns {!Long} Quotient
+	             */
+	            this.div = this.divide;
+	            /**
+	             * Returns this Long modulo the specified. This is an alias of {@link Long#modulo}.
+	             * @param {!Long|number|string} divisor Divisor
+	             * @returns {!Long} Remainder
+	             */
+	            this.mod = this.modulo;
+	            /**
+	             * Returns this Long with bits shifted to the left by the given amount. This is an alias of {@link Long#shiftLeft}.
+	             * @param {number|!Long} numBits Number of bits
+	             * @returns {!Long} Shifted Long
+	             */
+	            this.shl = this.shiftLeft;
+	            /**
+	             * Returns this Long with bits arithmetically shifted to the right by the given amount. This is an alias of {@link Long#shiftRight}.
+	             * @param {number|!Long} numBits Number of bits
+	             * @returns {!Long} Shifted Long
+	             */
+	            this.shr = this.shiftRight;
+	            /**
+	             * Returns this Long with bits logically shifted to the right by the given amount. This is an alias of {@link Long#shiftRightUnsigned}.
+	             * @param {number|!Long} numBits Number of bits
+	             * @returns {!Long} Shifted Long
+	             */
+	            this.shru = this.shiftRightUnsigned;
+	            this.low = low | 0;
+	            this.high = high | 0;
+	            this.unsigned = !!unsigned;
+	        }
+	        /**
+	         * Converts the Long to a 32 bit integer, assuming it is a 32 bit integer.
+	         * @returns {number}
+	         */
+	
+	
+	        Long.prototype.toInt = function toInt() {
+	            return this.unsigned ? this.low >>> 0 : this.low;
+	        };
+	        /**
+	         * Converts the Long to a the nearest floating-point representation of this value (double, 53 bit mantissa).
+	         * @returns {number}
+	         */
+	
+	
+	        Long.prototype.toNumber = function toNumber() {
+	            if (this.unsigned) return (this.high >>> 0) * TWO_PWR_32_DBL + (this.low >>> 0);
+	            return this.high * TWO_PWR_32_DBL + (this.low >>> 0);
+	        };
+	        /**
+	         * Converts the Long to a string written in the specified radix.
+	         * @param {number=} radix Radix (2-36), defaults to 10
+	         * @returns {string}
+	         * @override
+	         * @throws {RangeError} If `radix` is out of range
+	         */
+	
+	
+	        Long.prototype.toString = function toString() {
+	            var radix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+	
+	            radix = radix || 10;
+	            if (radix < 2 || 36 < radix) throw RangeError('radix');
+	            if (this.isZero()) return '0';
+	            if (this.isNegative()) {
+	                if (this.eq(MIN_VALUE)) {
+	                    // We need to change the Long value before it can be negated, so we remove
+	                    // the bottom-most digit in this base and then recurse to do the rest.
+	                    var radixLong = fromNumber(radix),
+	                        div = this.div(radixLong),
+	                        rem1 = div.mul(radixLong).sub(this);
+	                    return div.toString(radix) + rem1.toInt().toString(radix);
+	                } else return '-' + this.neg().toString(radix);
+	            }
+	            // Do several (6) digits each time through the loop, so as to
+	            // minimize the calls to the very expensive emulated div.
+	            var radixToPower = fromNumber(pow_dbl(radix, 6), this.unsigned),
+	                rem = this;
+	            var result = '';
+	            while (true) {
+	                var remDiv = rem.div(radixToPower),
+	                    intval = rem.sub(remDiv.mul(radixToPower)).toInt() >>> 0,
+	                    digits = intval.toString(radix);
+	                rem = remDiv;
+	                if (rem.isZero()) return digits + result;else {
+	                    while (digits.length < 6) {
+	                        digits = '0' + digits;
+	                    }result = '' + digits + result;
+	                }
+	            }
+	        };
+	        /**
+	         * Gets the high 32 bits as a signed integer.
+	         * @returns {number} Signed high bits
+	         */
+	
+	
+	        Long.prototype.getHighBits = function getHighBits() {
+	            return this.high;
+	        };
+	        /**
+	         * Gets the high 32 bits as an unsigned integer.
+	         * @returns {number} Unsigned high bits
+	         */
+	
+	
+	        Long.prototype.getHighBitsUnsigned = function getHighBitsUnsigned() {
+	            return this.high >>> 0;
+	        };
+	        /**
+	         * Gets the low 32 bits as a signed integer.
+	         * @returns {number} Signed low bits
+	         */
+	
+	
+	        Long.prototype.getLowBits = function getLowBits() {
+	            return this.low;
+	        };
+	        /**
+	         * Gets the low 32 bits as an unsigned integer.
+	         * @returns {number} Unsigned low bits
+	         */
+	
+	
+	        Long.prototype.getLowBitsUnsigned = function getLowBitsUnsigned() {
+	            return this.low >>> 0;
+	        };
+	        /**
+	         * Gets the number of bits needed to represent the absolute value of this
+	         * @returns {number}
+	         */
+	
+	
+	        Long.prototype.getNumBitsAbs = function getNumBitsAbs() {
+	            if (this.isNegative()) return this.eq(MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
+	            var val = this.high != 0 ? this.high : this.low;
+	            for (var bit = 31; bit > 0; bit--) {
+	                if ((val & 1 << bit) != 0) break;
+	            }return this.high != 0 ? bit + 33 : bit + 1;
+	        };
+	        /**
+	         * Tests if this Long's value equals zero.
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.isZero = function isZero() {
+	            return this.high === 0 && this.low === 0;
+	        };
+	        /**
+	         * Tests if this Long's value is negative.
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.isNegative = function isNegative() {
+	            return !this.unsigned && this.high < 0;
+	        };
+	        /**
+	         * Tests if this Long's value is positive.
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.isPositive = function isPositive() {
+	            return this.unsigned || this.high >= 0;
+	        };
+	        /**
+	         * Tests if this Long's value is odd.
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.isOdd = function isOdd() {
+	            return (this.low & 1) === 1;
+	        };
+	        /**
+	         * Tests if this Long's value is even.
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.isEven = function isEven() {
+	            return (this.low & 1) === 0;
+	        };
+	        /**
+	         * Tests if this Long's value equals the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.equals = function equals(other) {
+	            if (!isLong(other)) other = fromValue(other);
+	            if (this.unsigned !== other.unsigned && this.high >>> 31 === 1 && other.high >>> 31 === 1) return false;
+	            return this.high === other.high && this.low === other.low;
+	        };
+	        /**
+	         * Tests if this Long's value differs from the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.notEquals = function notEquals(other) {
+	            return !this.eq( /* validates */other);
+	        };
+	        /**
+	         * Tests if this Long's value is less than the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.lessThan = function lessThan(other) {
+	            return this.comp( /* validates */other) < 0;
+	        };
+	        /**
+	         * Tests if this Long's value is less than or equal the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.lessThanOrEqual = function lessThanOrEqual(other) {
+	            return this.comp( /* validates */other) <= 0;
+	        };
+	        /**
+	         * Tests if this Long's value is greater than the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.greaterThan = function greaterThan(other) {
+	            return this.comp( /* validates */other) > 0;
+	        };
+	        /**
+	         * Tests if this Long's value is greater than or equal the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {boolean}
+	         */
+	
+	
+	        Long.prototype.greaterThanOrEqual = function greaterThanOrEqual(other) {
+	            return this.comp( /* validates */other) >= 0;
+	        };
+	        /**
+	         * Compares this Long's value with the specified's.
+	         * @param {!Long|number|string} other Other value
+	         * @returns {number} 0 if they are the same, 1 if the this is greater and -1
+	         *  if the given one is greater
+	         */
+	
+	
+	        Long.prototype.compare = function compare(other) {
+	            if (!isLong(other)) other = fromValue(other);
+	            if (this.eq(other)) return 0;
+	            var thisNeg = this.isNegative(),
+	                otherNeg = other.isNegative();
+	            if (thisNeg && !otherNeg) return -1;
+	            if (!thisNeg && otherNeg) return 1;
+	            // At this point the sign bits are the same
+	            if (!this.unsigned) return this.sub(other).isNegative() ? -1 : 1;
+	            // Both are positive if at least one is unsigned
+	            return other.high >>> 0 > this.high >>> 0 || other.high === this.high && other.low >>> 0 > this.low >>> 0 ? -1 : 1;
+	        };
+	        /**
+	         * Negates this Long's value.
+	         * @returns {!Long} Negated Long
+	         */
+	
+	
+	        Long.prototype.negate = function negate() {
+	            if (!this.unsigned && this.eq(MIN_VALUE)) return MIN_VALUE;
+	            return this.not().add(ONE);
+	        };
+	        /**
+	         * Returns this Long's absolute value.
+	         * @returns {!Long} Absolute Long
+	         */
+	
+	
+	        Long.prototype.absolute = function absolute() {
+	            if (!this.unsigned && this.isNegative()) return this.negate();else return this;
+	        };
+	        /**
+	         * Returns the sum of this and the specified
+	         * @param {!Long|number|string} addend Addend
+	         * @returns {!Long} Sum
+	         */
+	
+	
+	        Long.prototype.add = function add(addend) {
+	            if (!isLong(addend)) addend = fromValue(addend);
+	            // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
+	            var a48 = this.high >>> 16;
+	            var a32 = this.high & 0xFFFF;
+	            var a16 = this.low >>> 16;
+	            var a00 = this.low & 0xFFFF;
+	            var b48 = addend.high >>> 16;
+	            var b32 = addend.high & 0xFFFF;
+	            var b16 = addend.low >>> 16;
+	            var b00 = addend.low & 0xFFFF;
+	            var c48 = 0,
+	                c32 = 0,
+	                c16 = 0,
+	                c00 = 0;
+	            c00 += a00 + b00;
+	            c16 += c00 >>> 16;
+	            c00 &= 0xFFFF;
+	            c16 += a16 + b16;
+	            c32 += c16 >>> 16;
+	            c16 &= 0xFFFF;
+	            c32 += a32 + b32;
+	            c48 += c32 >>> 16;
+	            c32 &= 0xFFFF;
+	            c48 += a48 + b48;
+	            c48 &= 0xFFFF;
+	            return fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+	        };
+	        /**
+	         * Returns the difference of this and the specified
+	         * @param {!Long|number|string} subtrahend Subtrahend
+	         * @returns {!Long} Difference
+	         */
+	
+	
+	        Long.prototype.subtract = function subtract(subtrahend) {
+	            if (!isLong(subtrahend)) subtrahend = fromValue(subtrahend);
+	            return this.add(subtrahend.neg());
+	        };
+	        /**
+	         * Returns the product of this and the specified
+	         * @param {!Long|number|string} multiplier Multiplier
+	         * @returns {!Long} Product
+	         */
+	
+	
+	        Long.prototype.multiply = function multiply(multiplier) {
+	            if (this.isZero()) return ZERO;
+	            if (!isLong(multiplier)) multiplier = fromValue(multiplier);
+	            if (multiplier.isZero()) return ZERO;
+	            if (this.eq(MIN_VALUE)) return multiplier.isOdd() ? MIN_VALUE : ZERO;
+	            if (multiplier.eq(MIN_VALUE)) return this.isOdd() ? MIN_VALUE : ZERO;
+	            if (this.isNegative()) {
+	                if (multiplier.isNegative()) return this.neg().mul(multiplier.neg());else return this.neg().mul(multiplier).neg();
+	            } else if (multiplier.isNegative()) return this.mul(multiplier.neg()).neg();
+	            // If both longs are small, use float multiplication
+	            if (this.lt(TWO_PWR_24) && multiplier.lt(TWO_PWR_24)) return fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
+	            // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
+	            // We can skip products that would overflow.
+	            var a48 = this.high >>> 16;
+	            var a32 = this.high & 0xFFFF;
+	            var a16 = this.low >>> 16;
+	            var a00 = this.low & 0xFFFF;
+	            var b48 = multiplier.high >>> 16;
+	            var b32 = multiplier.high & 0xFFFF;
+	            var b16 = multiplier.low >>> 16;
+	            var b00 = multiplier.low & 0xFFFF;
+	            var c48 = 0,
+	                c32 = 0,
+	                c16 = 0,
+	                c00 = 0;
+	            c00 += a00 * b00;
+	            c16 += c00 >>> 16;
+	            c00 &= 0xFFFF;
+	            c16 += a16 * b00;
+	            c32 += c16 >>> 16;
+	            c16 &= 0xFFFF;
+	            c16 += a00 * b16;
+	            c32 += c16 >>> 16;
+	            c16 &= 0xFFFF;
+	            c32 += a32 * b00;
+	            c48 += c32 >>> 16;
+	            c32 &= 0xFFFF;
+	            c32 += a16 * b16;
+	            c48 += c32 >>> 16;
+	            c32 &= 0xFFFF;
+	            c32 += a00 * b32;
+	            c48 += c32 >>> 16;
+	            c32 &= 0xFFFF;
+	            c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
+	            c48 &= 0xFFFF;
+	            return fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+	        };
+	        /**
+	         * Returns this Long divided by the specified. The result is signed if this Long is signed or
+	         *  unsigned if this Long is unsigned.
+	         * @param {!Long|number|string} divisor Divisor
+	         * @returns {!Long} Quotient
+	         */
+	
+	
+	        Long.prototype.divide = function divide(divisor) {
+	            if (!isLong(divisor)) divisor = fromValue(divisor);
+	            if (divisor.isZero()) throw Error('division by zero');
+	            if (this.isZero()) return this.unsigned ? UZERO : ZERO;
+	            var approx = 0,
+	                rem = ZERO,
+	                res = ZERO;
+	            if (!this.unsigned) {
+	                // This section is only relevant for signed longs and is derived from the
+	                // closure library as a whole.
+	                if (this.eq(MIN_VALUE)) {
+	                    if (divisor.eq(ONE) || divisor.eq(NEG_ONE)) return MIN_VALUE; // recall that -MIN_VALUE == MIN_VALUE
+	                    else if (divisor.eq(MIN_VALUE)) return ONE;else {
+	                            // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
+	                            var halfThis = this.shr(1);
+	                            var _approx = halfThis.div(divisor).shl(1);
+	                            if (_approx.eq(ZERO)) {
+	                                return divisor.isNegative() ? ONE : NEG_ONE;
+	                            } else {
+	                                rem = this.sub(divisor.mul(_approx));
+	                                res = _approx.add(rem.div(divisor));
+	                                return res;
+	                            }
+	                        }
+	                } else if (divisor.eq(MIN_VALUE)) return this.unsigned ? UZERO : ZERO;
+	                if (this.isNegative()) {
+	                    if (divisor.isNegative()) return this.neg().div(divisor.neg());
+	                    return this.neg().div(divisor).neg();
+	                } else if (divisor.isNegative()) return this.div(divisor.neg()).neg();
+	                res = ZERO;
+	            } else {
+	                // The algorithm below has not been made for unsigned longs. It's therefore
+	                // required to take special care of the MSB prior to running it.
+	                if (!divisor.unsigned) divisor = divisor.toUnsigned();
+	                if (divisor.gt(this)) return UZERO;
+	                if (divisor.gt(this.shru(1))) return UONE;
+	                res = UZERO;
+	            }
+	            // Repeat the following until the remainder is less than other:  find a
+	            // floating-point that approximates remainder / other *from below*, add this
+	            // into the result, and subtract it from the remainder.  It is critical that
+	            // the approximate value is less than or equal to the real value so that the
+	            // remainder never becomes negative.
+	            rem = this;
+	            while (rem.gte(divisor)) {
+	                // Approximate the result of division. This may be a little greater or
+	                // smaller than the actual value.
+	                approx = Math.max(1, Math.floor(rem.toNumber() / divisor.toNumber()));
+	                // We will tweak the approximate result by changing it in the 48-th digit or
+	                // the smallest non-fractional digit, whichever is larger.
+	                var log2 = Math.ceil(Math.log(approx) / Math.LN2),
+	                    delta = log2 <= 48 ? 1 : pow_dbl(2, log2 - 48),
+	
+	                // Decrease the approximation until it is smaller than the remainder.  Note
+	                // that if it is too large, the product overflows and is negative.
+	                approxRes = fromNumber(approx),
+	                    approxRem = approxRes.mul(divisor);
+	                while (approxRem.isNegative() || approxRem.gt(rem)) {
+	                    approx -= delta;
+	                    approxRes = fromNumber(approx, this.unsigned);
+	                    approxRem = approxRes.mul(divisor);
+	                }
+	                // We know the answer can't be zero... and actually, zero would cause
+	                // infinite recursion since we would make no progress.
+	                if (approxRes.isZero()) approxRes = ONE;
+	                res = res.add(approxRes);
+	                rem = rem.sub(approxRem);
+	            }
+	            return res;
+	        };
+	        /**
+	         * Returns this Long modulo the specified.
+	         * @param {!Long|number|string} divisor Divisor
+	         * @returns {!Long} Remainder
+	         */
+	
+	
+	        Long.prototype.modulo = function modulo(divisor) {
+	            if (!isLong(divisor)) divisor = fromValue(divisor);
+	            return this.sub(this.div(divisor).mul(divisor));
+	        };
+	
+	        /**
+	         * Returns the bitwise NOT of this
+	         * @returns {!Long}
+	         */
+	        Long.prototype.not = function not() {
+	            return fromBits(~this.low, ~this.high, this.unsigned);
+	        };
+	
+	        /**
+	         * Returns the bitwise AND of this Long and the specified.
+	         * @param {!Long|number|string} other Other Long
+	         * @returns {!Long}
+	         */
+	        Long.prototype.and = function and(other) {
+	            if (!isLong(other)) other = fromValue(other);
+	            return fromBits(this.low & other.low, this.high & other.high, this.unsigned);
+	        };
+	        /**
+	         * Returns the bitwise OR of this Long and the specified.
+	         * @param {!Long|number|string} other Other Long
+	         * @returns {!Long}
+	         */
+	
+	
+	        Long.prototype.or = function or(other) {
+	            if (!isLong(other)) other = fromValue(other);
+	            return fromBits(this.low | other.low, this.high | other.high, this.unsigned);
+	        };
+	        /**
+	         * Returns the bitwise XOR of this Long and the given one.
+	         * @param {!Long|number|string} other Other Long
+	         * @returns {!Long}
+	         */
+	
+	
+	        Long.prototype.xor = function xor(other) {
+	            if (!isLong(other)) other = fromValue(other);
+	            return fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
+	        };
+	        /**
+	         * Returns this Long with bits shifted to the left by the given amount.
+	         * @param {number|!Long} numBits Number of bits
+	         * @returns {!Long} Shifted Long
+	         */
+	
+	
+	        Long.prototype.shiftLeft = function shiftLeft(numBits) {
+	            if (isLong(numBits)) numBits = numBits.toInt();
+	            numBits = numBits & 63;
+	            if (numBits === 0) return this;else if (numBits < 32) return fromBits(this.low << numBits, this.high << numBits | this.low >>> 32 - numBits, this.unsigned);else return fromBits(0, this.low << numBits - 32, this.unsigned);
+	        };
+	        /**
+	         * Returns this Long with bits arithmetically shifted to the right by the given amount.
+	         * @param {number|!Long} numBits Number of bits
+	         * @returns {!Long} Shifted Long
+	         */
+	
+	
+	        Long.prototype.shiftRight = function shiftRight(numBits) {
+	            if (isLong(numBits)) numBits = numBits.toInt();
+	            numBits = numBits & 63;
+	            if (numBits === 0) return this;else if (numBits < 32) return fromBits(this.low >>> numBits | this.high << 32 - numBits, this.high >> numBits, this.unsigned);else return fromBits(this.high >> numBits - 32, this.high >= 0 ? 0 : -1, this.unsigned);
+	        };
+	        /**
+	         * Returns this Long with bits logically shifted to the right by the given amount.
+	         * @param {number|!Long} numBits Number of bits
+	         * @returns {!Long} Shifted Long
+	         */
+	
+	
+	        Long.prototype.shiftRightUnsigned = function shiftRightUnsigned(numBits) {
+	            if (isLong(numBits)) numBits = numBits.toInt();
+	            numBits = numBits & 63;
+	            if (numBits === 0) return this;else {
+	                var high = this.high;
+	                if (numBits < 32) {
+	                    var low = this.low;
+	                    return fromBits(low >>> numBits | high << 32 - numBits, high >>> numBits, this.unsigned);
+	                } else if (numBits === 32) return fromBits(high, 0, this.unsigned);else return fromBits(high >>> numBits - 32, 0, this.unsigned);
+	            }
+	        };
+	        /**
+	         * Converts this Long to signed.
+	         * @returns {!Long} Signed long
+	         */
+	
+	
+	        Long.prototype.toSigned = function toSigned() {
+	            if (!this.unsigned) return this;
+	            return fromBits(this.low, this.high, false);
+	        };
+	        /**
+	         * Converts this Long to unsigned.
+	         * @returns {!Long} Unsigned long
+	         */
+	
+	
+	        Long.prototype.toUnsigned = function toUnsigned() {
+	            if (this.unsigned) return this;
+	            return fromBits(this.low, this.high, true);
+	        };
+	        /**
+	         * Converts this Long to its byte representation.
+	         * @param {boolean=} le Whether little or big endian, defaults to big endian
+	         * @returns {!Array.<number>} Byte representation
+	         */
+	
+	
+	        Long.prototype.toBytes = function toBytes(le) {
+	            return le ? this.toBytesLE() : this.toBytesBE();
+	        };
+	        /**
+	         * Converts this Long to its little endian byte representation.
+	         * @returns {!Array.<number>} Little endian byte representation
+	         */
+	
+	
+	        Long.prototype.toBytesLE = function toBytesLE() {
+	            var hi = this.high,
+	                lo = this.low;
+	            return [lo & 0xff, lo >>> 8 & 0xff, lo >>> 16 & 0xff, lo >>> 24 & 0xff, hi & 0xff, hi >>> 8 & 0xff, hi >>> 16 & 0xff, hi >>> 24 & 0xff];
+	        };
+	        /**
+	         * Converts this Long to its big endian byte representation.
+	         * @returns {!Array.<number>} Big endian byte representation
+	         */
+	
+	
+	        Long.prototype.toBytesBE = function toBytesBE() {
+	            var hi = this.high,
+	                lo = this.low;
+	            return [hi >>> 24 & 0xff, hi >>> 16 & 0xff, hi >>> 8 & 0xff, hi & 0xff, lo >>> 24 & 0xff, lo >>> 16 & 0xff, lo >>> 8 & 0xff, lo & 0xff];
+	        };
+	
+	        return Long;
+	    }();
+	
+	    // A cache of the Long representations of small integer values.
+	    var INT_CACHE = {};
+	    // A cache of the Long representations of small unsigned integer values.
+	    var UINT_CACHE = {};
+	    /**
+	     * Tests if the specified object is a
+	     * @param {*} obj Object
+	     * @returns {boolean}
+	     */
+	    function isLong(obj) {
+	        return obj && obj instanceof Long;
+	    }
+	    /**
+	     * Returns a Long representing the given 32 bit integer value.
+	     * @param {number} value The 32 bit integer in question
+	     * @param {boolean=} unsigned Whether unsigned or not, defaults to `false` for signed
+	     * @returns {!Long} The corresponding Long value
+	     */
+	    function fromInt(value) {
+	        var unsigned = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	        var obj, cachedObj, cache;
+	        if (unsigned) {
+	            value >>>= 0;
+	            if (cache = 0 <= value && value < 256) {
+	                cachedObj = UINT_CACHE[value];
+	                if (cachedObj) return cachedObj;
+	            }
+	            obj = fromBits(value, (value | 0) < 0 ? -1 : 0, true);
+	            if (cache) UINT_CACHE[value] = obj;
+	            return obj;
+	        } else {
+	            value |= 0;
+	            if (cache = -128 <= value && value < 128) {
+	                cachedObj = INT_CACHE[value];
+	                if (cachedObj) return cachedObj;
+	            }
+	            obj = fromBits(value, value < 0 ? -1 : 0, false);
+	            if (cache) INT_CACHE[value] = obj;
+	            return obj;
+	        }
+	    }
+	    /**
+	     * Returns a Long representing the given value, provided that it is a finite number. Otherwise, zero is returned.
+	     * @param {number} value The number in question
+	     * @param {boolean=} unsigned Whether unsigned or not, defaults to `false` for signed
+	     * @returns {!Long} The corresponding Long value
+	     */
+	    function fromNumber(value) {
+	        var unsigned = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	        if (isNaN(value) || !isFinite(value)) return unsigned ? UZERO : ZERO;
+	        if (unsigned) {
+	            if (value < 0) return UZERO;
+	            if (value >= TWO_PWR_64_DBL) return MAX_UNSIGNED_VALUE;
+	        } else {
+	            if (value <= -TWO_PWR_63_DBL) return MIN_VALUE;
+	            if (value + 1 >= TWO_PWR_63_DBL) return MAX_VALUE;
+	        }
+	        if (value < 0) return fromNumber(-value, unsigned).neg();
+	        return fromBits(value % TWO_PWR_32_DBL | 0, value / TWO_PWR_32_DBL | 0, unsigned);
+	    }
+	    /**
+	     * Returns a Long representing the 64 bit integer that comes by concatenating the given low and high bits. Each is
+	     *  assumed to use 32 bits.
+	     * @param {number} lowBits The low 32 bits
+	     * @param {number} highBits The high 32 bits
+	     * @param {boolean=} unsigned Whether unsigned or not, defaults to `false` for signed
+	     * @returns {!Long} The corresponding Long value
+	     */
+	    function fromBits(lowBits, highBits, unsigned) {
+	        return new Long(lowBits, highBits, unsigned);
+	    }
+	    /**
+	     * @param {number} base
+	     * @param {number} exponent
+	     * @returns {number}
+	     */
+	    var pow_dbl = Math.pow; // Used 4 times (4*8 to 15+4)
+	    /**
+	     * Returns a Long representation of the given string, written using the specified radix.
+	     * @param {string} str The textual representation of the Long
+	     * @param {(boolean|number)=} unsigned Whether unsigned or not, defaults to `false` for signed
+	     * @param {number=} radix The radix in which the text is written (2-36), defaults to 10
+	     * @returns {!Long} The corresponding Long value
+	     */
+	    // Used 4 times (4*8 to 15+4)
+	    function fromString(str) {
+	        var unsigned = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	        var radix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
+	
+	        if (str.length === 0) throw Error('empty string');
+	        if (str === "NaN" || str === "Infinity" || str === "+Infinity" || str === "-Infinity") return ZERO;
+	        if (typeof unsigned === 'number') {
+	            // For goog.math.long compatibility
+	            radix = unsigned, unsigned = false;
+	        } else {
+	            unsigned = !!unsigned;
+	        }
+	        radix = radix || 10;
+	        if (radix < 2 || 36 < radix) throw RangeError('radix');
+	        var p = str.indexOf('-');
+	        if (p > 0) throw Error('interior hyphen');else if (p === 0) {
+	            return fromString(str.substring(1), unsigned, radix).neg();
+	        }
+	        // Do several (8) digits each time through the loop, so as to
+	        // minimize the calls to the very expensive emulated div.
+	        var radixToPower = fromNumber(pow_dbl(radix, 8));
+	        var result = ZERO;
+	        for (var i = 0; i < str.length; i += 8) {
+	            var size = Math.min(8, str.length - i),
+	                value = parseInt(str.substring(i, i + size), radix);
+	            if (size < 8) {
+	                var power = fromNumber(pow_dbl(radix, size));
+	                result = result.mul(power).add(fromNumber(value));
+	            } else {
+	                result = result.mul(radixToPower);
+	                result = result.add(fromNumber(value));
+	            }
+	        }
+	        result.unsigned = unsigned;
+	        return result;
+	    }
+	    /**
+	     * Converts the specified value to a
+	     * @param {!Long|number|string|!{low: number, high: number, unsigned: boolean}} val Value
+	     * @returns {!Long}
+	     */
+	    function fromValue(val) {
+	        if (val /* is compatible */ instanceof Long) return val;
+	        if (typeof val === 'number') return fromNumber(val);
+	        if (typeof val === 'string') return fromString(val);
+	        // Throws for non-objects, converts non-instanceof Long:
+	        return fromBits(val.low, val.high, val.unsigned);
+	    }
+	    // NOTE: the compiler should inline these constant values below and then remove these variables, so there should be
+	    // no runtime penalty for these.
+	    var TWO_PWR_16_DBL = 1 << 16;
+	    var TWO_PWR_24_DBL = 1 << 24;
+	    var TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL;
+	    var TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL;
+	    var TWO_PWR_63_DBL = TWO_PWR_64_DBL / 2;
+	    var TWO_PWR_24 = fromInt(TWO_PWR_24_DBL);
+	    /**
+	     * Signed zero.
+	     * @type {!Long}
+	     */
+	    var ZERO = exports.ZERO = fromInt(0);
+	    /**
+	     * Unsigned zero.
+	     * @type {!Long}
+	     */
+	    var UZERO = exports.UZERO = fromInt(0, true);
+	    /**
+	     * Signed one.
+	     * @type {!Long}
+	     */
+	    var ONE = exports.ONE = fromInt(1);
+	    /**
+	     * Unsigned one.
+	     * @type {!Long}
+	     */
+	    var UONE = exports.UONE = fromInt(1, true);
+	    /**
+	     * Signed negative one.
+	     * @type {!Long}
+	     */
+	    var NEG_ONE = exports.NEG_ONE = fromInt(-1);
+	    /**
+	     * Maximum signed value.
+	     * @type {!Long}
+	     */
+	    var MAX_VALUE = exports.MAX_VALUE = fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0, false);
+	    /**
+	     * Maximum unsigned value.
+	     * @type {!Long}
+	     */
+	    var MAX_UNSIGNED_VALUE = exports.MAX_UNSIGNED_VALUE = fromBits(0xFFFFFFFF | 0, 0xFFFFFFFF | 0, true);
+	    /**
+	     * Minimum signed value.
+	     * @type {!Long}
+	     */
+	    var MIN_VALUE = exports.MIN_VALUE = fromBits(0, 0x80000000 | 0, false);
+	});
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4233,7 +5010,7 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4256,7 +5033,7 @@
 	
 	var _List2 = _interopRequireDefault(_List);
 	
-	var _virtualDom = __webpack_require__(16);
+	var _virtualDom = __webpack_require__(17);
 	
 	var _Symbol2 = __webpack_require__(1);
 	
@@ -4473,15 +5250,15 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var diff = __webpack_require__(17)
-	var patch = __webpack_require__(30)
-	var h = __webpack_require__(39)
-	var create = __webpack_require__(50)
-	var VNode = __webpack_require__(41)
-	var VText = __webpack_require__(42)
+	var diff = __webpack_require__(18)
+	var patch = __webpack_require__(31)
+	var h = __webpack_require__(40)
+	var create = __webpack_require__(51)
+	var VNode = __webpack_require__(42)
+	var VText = __webpack_require__(43)
 	
 	module.exports = {
 	    diff: diff,
@@ -4494,28 +5271,28 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var diff = __webpack_require__(18)
+	var diff = __webpack_require__(19)
 	
 	module.exports = diff
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isArray = __webpack_require__(19)
+	var isArray = __webpack_require__(20)
 	
-	var VPatch = __webpack_require__(20)
-	var isVNode = __webpack_require__(22)
-	var isVText = __webpack_require__(23)
-	var isWidget = __webpack_require__(24)
-	var isThunk = __webpack_require__(25)
-	var handleThunk = __webpack_require__(26)
+	var VPatch = __webpack_require__(21)
+	var isVNode = __webpack_require__(23)
+	var isVText = __webpack_require__(24)
+	var isWidget = __webpack_require__(25)
+	var isThunk = __webpack_require__(26)
+	var handleThunk = __webpack_require__(27)
 	
-	var diffProps = __webpack_require__(27)
+	var diffProps = __webpack_require__(28)
 	
 	module.exports = diff
 	
@@ -4936,7 +5713,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	var nativeIsArray = Array.isArray
@@ -4950,10 +5727,10 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var version = __webpack_require__(21)
+	var version = __webpack_require__(22)
 	
 	VirtualPatch.NONE = 0
 	VirtualPatch.VTEXT = 1
@@ -4978,17 +5755,17 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	module.exports = "2"
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var version = __webpack_require__(21)
+	var version = __webpack_require__(22)
 	
 	module.exports = isVirtualNode
 	
@@ -4998,10 +5775,10 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var version = __webpack_require__(21)
+	var version = __webpack_require__(22)
 	
 	module.exports = isVirtualText
 	
@@ -5011,7 +5788,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = isWidget
@@ -5022,7 +5799,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	module.exports = isThunk
@@ -5033,13 +5810,13 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isVNode = __webpack_require__(22)
-	var isVText = __webpack_require__(23)
-	var isWidget = __webpack_require__(24)
-	var isThunk = __webpack_require__(25)
+	var isVNode = __webpack_require__(23)
+	var isVText = __webpack_require__(24)
+	var isWidget = __webpack_require__(25)
+	var isThunk = __webpack_require__(26)
 	
 	module.exports = handleThunk
 	
@@ -5079,11 +5856,11 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(28)
-	var isHook = __webpack_require__(29)
+	var isObject = __webpack_require__(29)
+	var isHook = __webpack_require__(30)
 	
 	module.exports = diffProps
 	
@@ -5143,7 +5920,7 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5154,7 +5931,7 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = isHook
@@ -5167,24 +5944,24 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var patch = __webpack_require__(31)
+	var patch = __webpack_require__(32)
 	
 	module.exports = patch
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var document = __webpack_require__(32)
-	var isArray = __webpack_require__(19)
+	var document = __webpack_require__(33)
+	var isArray = __webpack_require__(20)
 	
-	var render = __webpack_require__(34)
-	var domIndex = __webpack_require__(36)
-	var patchOp = __webpack_require__(37)
+	var render = __webpack_require__(35)
+	var domIndex = __webpack_require__(37)
+	var patchOp = __webpack_require__(38)
 	module.exports = patch
 	
 	function patch(rootNode, patches, renderOptions) {
@@ -5262,12 +6039,12 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {var topLevel = typeof global !== 'undefined' ? global :
 	    typeof window !== 'undefined' ? window : {}
-	var minDoc = __webpack_require__(33);
+	var minDoc = __webpack_require__(34);
 	
 	if (typeof document !== 'undefined') {
 	    module.exports = document;
@@ -5284,23 +6061,23 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var document = __webpack_require__(32)
+	var document = __webpack_require__(33)
 	
-	var applyProperties = __webpack_require__(35)
+	var applyProperties = __webpack_require__(36)
 	
-	var isVNode = __webpack_require__(22)
-	var isVText = __webpack_require__(23)
-	var isWidget = __webpack_require__(24)
-	var handleThunk = __webpack_require__(26)
+	var isVNode = __webpack_require__(23)
+	var isVText = __webpack_require__(24)
+	var isWidget = __webpack_require__(25)
+	var handleThunk = __webpack_require__(27)
 	
 	module.exports = createElement
 	
@@ -5342,11 +6119,11 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(28)
-	var isHook = __webpack_require__(29)
+	var isObject = __webpack_require__(29)
+	var isHook = __webpack_require__(30)
 	
 	module.exports = applyProperties
 	
@@ -5445,7 +6222,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 	// Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
@@ -5536,15 +6313,15 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var applyProperties = __webpack_require__(35)
+	var applyProperties = __webpack_require__(36)
 	
-	var isWidget = __webpack_require__(24)
-	var VPatch = __webpack_require__(20)
+	var isWidget = __webpack_require__(25)
+	var VPatch = __webpack_require__(21)
 	
-	var updateWidget = __webpack_require__(38)
+	var updateWidget = __webpack_require__(39)
 	
 	module.exports = applyPatch
 	
@@ -5693,10 +6470,10 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isWidget = __webpack_require__(24)
+	var isWidget = __webpack_require__(25)
 	
 	module.exports = updateWidget
 	
@@ -5714,33 +6491,33 @@
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var h = __webpack_require__(40)
+	var h = __webpack_require__(41)
 	
 	module.exports = h
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var isArray = __webpack_require__(19);
+	var isArray = __webpack_require__(20);
 	
-	var VNode = __webpack_require__(41);
-	var VText = __webpack_require__(42);
-	var isVNode = __webpack_require__(22);
-	var isVText = __webpack_require__(23);
-	var isWidget = __webpack_require__(24);
-	var isHook = __webpack_require__(29);
-	var isVThunk = __webpack_require__(25);
+	var VNode = __webpack_require__(42);
+	var VText = __webpack_require__(43);
+	var isVNode = __webpack_require__(23);
+	var isVText = __webpack_require__(24);
+	var isWidget = __webpack_require__(25);
+	var isHook = __webpack_require__(30);
+	var isVThunk = __webpack_require__(26);
 	
-	var parseTag = __webpack_require__(43);
-	var softSetHook = __webpack_require__(45);
-	var evHook = __webpack_require__(46);
+	var parseTag = __webpack_require__(44);
+	var softSetHook = __webpack_require__(46);
+	var evHook = __webpack_require__(47);
 	
 	module.exports = h;
 	
@@ -5866,14 +6643,14 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var version = __webpack_require__(21)
-	var isVNode = __webpack_require__(22)
-	var isWidget = __webpack_require__(24)
-	var isThunk = __webpack_require__(25)
-	var isVHook = __webpack_require__(29)
+	var version = __webpack_require__(22)
+	var isVNode = __webpack_require__(23)
+	var isWidget = __webpack_require__(25)
+	var isThunk = __webpack_require__(26)
+	var isVHook = __webpack_require__(30)
 	
 	module.exports = VirtualNode
 	
@@ -5944,10 +6721,10 @@
 
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var version = __webpack_require__(21)
+	var version = __webpack_require__(22)
 	
 	module.exports = VirtualText
 	
@@ -5960,12 +6737,12 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var split = __webpack_require__(44);
+	var split = __webpack_require__(45);
 	
 	var classIdSplit = /([\.#]?[a-zA-Z0-9\u007F-\uFFFF_:-]+)/;
 	var notClassId = /^\.|#/;
@@ -6020,7 +6797,7 @@
 
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports) {
 
 	/*!
@@ -6132,7 +6909,7 @@
 
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6155,12 +6932,12 @@
 
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var EvStore = __webpack_require__(47);
+	var EvStore = __webpack_require__(48);
 	
 	module.exports = EvHook;
 	
@@ -6188,12 +6965,12 @@
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var OneVersionConstraint = __webpack_require__(48);
+	var OneVersionConstraint = __webpack_require__(49);
 	
 	var MY_VERSION = '7';
 	OneVersionConstraint('ev-store', MY_VERSION);
@@ -6214,12 +6991,12 @@
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Individual = __webpack_require__(49);
+	var Individual = __webpack_require__(50);
 	
 	module.exports = OneVersion;
 	
@@ -6242,7 +7019,7 @@
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -6268,10 +7045,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var createElement = __webpack_require__(34)
+	var createElement = __webpack_require__(35)
 	
 	module.exports = createElement
 

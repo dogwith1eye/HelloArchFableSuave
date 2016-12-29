@@ -11,8 +11,8 @@ let deployDir = "./deploy/"
 
 // Filesets
 let appReferences  =
-    !! "/**/*.csproj"
-    ++ "/**/*.fsproj"
+    !! "/src/server/*.csproj"
+    ++ "/src/server/*.fsproj"
 
 // version info
 let version = "0.1"  // or retrieve from CI server
@@ -26,6 +26,12 @@ Target "Build" (fun _ ->
     // compile all projects below src/server/
     MSBuildDebug buildDir "Build" appReferences
     |> Log "AppBuild-Output: "
+    // install the fable compiler
+    Npm (fun p ->
+              { p with
+                  Command = Install Standard
+                  WorkingDirectory = "."
+              })
     // build the client
     Npm (fun p -> 
               { p with
